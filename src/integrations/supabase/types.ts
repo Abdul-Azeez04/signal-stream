@@ -14,7 +14,54 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      signals: {
+        Row: {
+          author_avatar: string | null
+          author_name: string | null
+          category: Database["public"]["Enums"]["signal_category"]
+          content: string | null
+          created_at: string
+          id: string
+          importance: number
+          published_at: string
+          source: string | null
+          source_url: string | null
+          summary: string
+          tags: string[] | null
+          title: string
+        }
+        Insert: {
+          author_avatar?: string | null
+          author_name?: string | null
+          category?: Database["public"]["Enums"]["signal_category"]
+          content?: string | null
+          created_at?: string
+          id?: string
+          importance?: number
+          published_at?: string
+          source?: string | null
+          source_url?: string | null
+          summary: string
+          tags?: string[] | null
+          title: string
+        }
+        Update: {
+          author_avatar?: string | null
+          author_name?: string | null
+          category?: Database["public"]["Enums"]["signal_category"]
+          content?: string | null
+          created_at?: string
+          id?: string
+          importance?: number
+          published_at?: string
+          source?: string | null
+          source_url?: string | null
+          summary?: string
+          tags?: string[] | null
+          title?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -23,7 +70,15 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      signal_category:
+        | "ai"
+        | "web3"
+        | "defi"
+        | "nft"
+        | "dev-tools"
+        | "opportunities"
+        | "news"
+        | "research"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +205,17 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      signal_category: [
+        "ai",
+        "web3",
+        "defi",
+        "nft",
+        "dev-tools",
+        "opportunities",
+        "news",
+        "research",
+      ],
+    },
   },
 } as const
