@@ -22,13 +22,16 @@ export type Database = {
           content: string | null
           created_at: string
           id: string
+          image_url: string | null
           importance: number
+          moderated: boolean | null
           published_at: string
           source: string | null
           source_url: string | null
           summary: string
           tags: string[] | null
           title: string
+          views_count: number | null
         }
         Insert: {
           author_avatar?: string | null
@@ -37,13 +40,16 @@ export type Database = {
           content?: string | null
           created_at?: string
           id?: string
+          image_url?: string | null
           importance?: number
+          moderated?: boolean | null
           published_at?: string
           source?: string | null
           source_url?: string | null
           summary: string
           tags?: string[] | null
           title: string
+          views_count?: number | null
         }
         Update: {
           author_avatar?: string | null
@@ -52,13 +58,16 @@ export type Database = {
           content?: string | null
           created_at?: string
           id?: string
+          image_url?: string | null
           importance?: number
+          moderated?: boolean | null
           published_at?: string
           source?: string | null
           source_url?: string | null
           summary?: string
           tags?: string[] | null
           title?: string
+          views_count?: number | null
         }
         Relationships: []
       }
