@@ -308,6 +308,9 @@ export default function AdminPanel() {
                 importance: editingSignal.importance,
                 tags: editingSignal.tags,
                 published_at: editingSignal.published_at,
+                image_url: editingSignal.image_url,
+                moderated: editingSignal.moderated,
+                views_count: editingSignal.views_count,
               }}
               onSave={handleUpdate}
               onCancel={() => setEditingId(null)}
