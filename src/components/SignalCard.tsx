@@ -1,5 +1,5 @@
 import { formatDistanceToNow } from "date-fns";
-import { ExternalLink, TrendingUp } from "lucide-react";
+import { ExternalLink, TrendingUp, Shield, Eye } from "lucide-react";
 import type { Tables } from "@/integrations/supabase/types";
 
 type Signal = Tables<"signals">;
@@ -31,12 +31,14 @@ export function SignalCard({ signal, index }: { signal: Signal; index: number })
 
   return (
     <article
-      className="animate-reveal group relative rounded-lg border border-border bg-card p-5 shadow-sm transition-shadow duration-200 hover:shadow-md active:scale-[0.99]"
-      style={{ animationDelay: `${index * 80}ms` }}
+      className="animate-reveal group relative rounded-lg border border-border bg-card p-5 shadow-sm transition-all duration-200 hover:shadow-md hover:border-border/80 active:scale-[0.99]"
+      style={{ animationDelay: `${index * 60}ms` }}
     >
-      {/* Top row: category + time + importance */}
+      {/* Top row */}
       <div className="mb-3 flex items-center gap-2 text-sm">
-        <span className={`inline-flex items-center rounded-md px-2 py-0.5 text-xs font-medium ${categoryStyles[signal.category]}`}>
+        <span
+          className={`inline-flex items-center rounded-md px-2 py-0.5 text-xs font-medium ${categoryStyles[signal.category]}`}
+        >
           {categoryLabels[signal.category]}
         </span>
         {signal.importance >= 8 && (
@@ -45,24 +47,33 @@ export function SignalCard({ signal, index }: { signal: Signal; index: number })
             High signal
           </span>
         )}
+        {signal.moderated && (
+          <span className="inline-flex items-center gap-1 text-[10px] text-muted-foreground">
+            <Shield className="h-2.5 w-2.5" />
+            Verified
+          </span>
+        )}
         <span className="ml-auto text-xs text-muted-foreground">{timeAgo}</span>
       </div>
 
       {/* Title */}
-      <h3 className="mb-2 text-base font-semibold leading-snug tracking-tight text-card-foreground">
+      <h3 className="mb-2 text-base font-semibold leading-snug tracking-tight text-card-foreground group-hover:text-foreground transition-colors">
         {signal.title}
       </h3>
 
       {/* Summary */}
-      <p className="mb-3 text-sm leading-relaxed text-muted-foreground">
-        {signal.summary}
-      </p>
+      <p className="mb-3 text-sm leading-relaxed text-muted-foreground line-clamp-2">{signal.summary}</p>
 
-      {/* Footer: source + tags */}
+      {/* Footer */}
       <div className="flex flex-wrap items-center gap-2">
         {signal.source && (
           <span className="text-xs text-muted-foreground">
             via <span className="font-medium text-foreground/70">{signal.source}</span>
+          </span>
+        )}
+        {signal.author_name && (
+          <span className="text-xs text-muted-foreground">
+            • <span className="font-medium text-foreground/70">{signal.author_name}</span>
           </span>
         )}
         {signal.tags?.slice(0, 3).map((tag) => (
@@ -73,16 +84,22 @@ export function SignalCard({ signal, index }: { signal: Signal; index: number })
             {tag}
           </span>
         ))}
-        {signal.source_url && (
-          <a
-            href={signal.source_url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="ml-auto inline-flex items-center gap-1 text-xs text-muted-foreground opacity-0 transition-opacity duration-200 group-hover:opacity-100 hover:text-primary"
-          >
-            <ExternalLink className="h-3 w-3" />
-          </a>
-        )}
+        <div className="ml-auto flex items-center gap-2">
+          <span className="font-mono text-[10px] text-muted-foreground">
+            {signal.importance}/10
+          </span>
+          {signal.source_url && (
+            <a
+              href={signal.source_url}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => e.stopPropagation()}
+              className="inline-flex items-center gap-1 text-xs text-muted-foreground opacity-0 transition-opacity duration-200 group-hover:opacity-100 hover:text-primary"
+            >
+              <ExternalLink className="h-3 w-3" />
+            </a>
+          )}
+        </div>
       </div>
     </article>
   );
