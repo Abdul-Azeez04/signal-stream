@@ -45,6 +45,9 @@ const emptySignal: SignalInsert = {
   importance: 5,
   tags: [],
   published_at: new Date().toISOString(),
+  image_url: null,
+  moderated: null,
+  views_count: 0,
 };
 
 function SignalForm({
