@@ -20,7 +20,7 @@ export default function SignalDetail() {
   // Increment view count
   useEffect(() => {
     if (id) {
-      supabase.rpc("increment_views" as any, { signal_id: id }).then(() => {});
+      supabase.from("signals").update({ views_count: ((signal?.views_count || 0) + 1) } as any).eq("id", id).then(() => {});
     }
   }, [id]);
 
