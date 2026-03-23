@@ -88,6 +88,23 @@ export type Database = {
         | "opportunities"
         | "news"
         | "research"
+        | "politics"
+        | "business"
+        | "health"
+        | "science"
+        | "education"
+        | "entertainment"
+        | "sports"
+        | "africa"
+        | "world"
+        | "environment"
+        | "finance"
+        | "startups"
+        | "security"
+        | "culture"
+        | "lifestyle"
+        | "breaking"
+        | "investigative"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -224,6 +241,23 @@ export const Constants = {
         "opportunities",
         "news",
         "research",
+        "politics",
+        "business",
+        "health",
+        "science",
+        "education",
+        "entertainment",
+        "sports",
+        "africa",
+        "world",
+        "environment",
+        "finance",
+        "startups",
+        "security",
+        "culture",
+        "lifestyle",
+        "breaking",
+        "investigative",
       ],
     },
   },
