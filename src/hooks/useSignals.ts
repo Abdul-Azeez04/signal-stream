@@ -30,7 +30,7 @@ export function useSignals(category: string | null, search: string) {
         .from("signals")
         .select("*")
         .order("published_at", { ascending: false })
-        .limit(50);
+        .limit(100);
 
       if (category) {
         query = query.eq("category", category as any);
