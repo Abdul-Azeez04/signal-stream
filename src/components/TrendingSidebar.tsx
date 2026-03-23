@@ -92,7 +92,7 @@ export function TrendingSidebar() {
         <div className="space-y-2">
           {categoryCounts &&
             Object.entries(categoryCounts)
-              .sort(([, a], [, b]) => b - a)
+              .sort(([, a], [, b]) => (b as number) - (a as number))
               .map(([cat, count]) => (
                 <div key={cat} className="flex items-center justify-between text-xs">
                   <span className="text-muted-foreground">{categoryLabels[cat] || cat}</span>
