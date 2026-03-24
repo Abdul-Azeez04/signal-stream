@@ -14,7 +14,8 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
+        sans: ['DM Sans', 'system-ui', 'sans-serif'],
+        headline: ['DM Serif Display', 'Georgia', 'serif'],
         mono: ['JetBrains Mono', 'monospace'],
       },
       colors: {
@@ -50,16 +51,6 @@ export default {
         card: {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
-        },
-        signal: {
-          ai: "hsl(var(--signal-ai))",
-          web3: "hsl(var(--signal-web3))",
-          defi: "hsl(var(--signal-defi))",
-          nft: "hsl(var(--signal-nft))",
-          devtools: "hsl(var(--signal-devtools))",
-          opportunities: "hsl(var(--signal-opportunities))",
-          news: "hsl(var(--signal-news))",
-          research: "hsl(var(--signal-research))",
         },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
