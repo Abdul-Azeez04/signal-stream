@@ -1,6 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { Activity, Zap, BarChart3, Globe } from "lucide-react";
 
 export function StatsBar() {
   const { data: stats } = useQuery({
@@ -28,26 +27,25 @@ export function StatsBar() {
   if (!stats) return null;
 
   return (
-    <div className="border-b border-border bg-card/50">
-      <div className="mx-auto flex max-w-6xl items-center gap-6 overflow-x-auto px-4 py-2 text-xs">
-        <div className="flex items-center gap-1.5 text-muted-foreground">
-          <BarChart3 className="h-3 w-3" />
-          <span className="font-mono font-medium text-foreground">{stats.total.toLocaleString()}</span>
-          <span>total signals</span>
+    <div className="border-b border-border bg-muted/30">
+      <div className="mx-auto flex max-w-7xl items-center justify-center gap-6 px-4 py-1.5 text-[11px] font-body text-muted-foreground sm:gap-8">
+        <div className="flex items-center gap-1.5">
+          <span className="font-mono font-semibold text-foreground">{stats.total.toLocaleString()}</span>
+          <span>articles</span>
         </div>
-        <div className="flex items-center gap-1.5 text-muted-foreground">
-          <Activity className="h-3 w-3 text-accent" />
-          <span className="font-mono font-medium text-foreground">{stats.today}</span>
+        <div className="h-3 w-px bg-border" />
+        <div className="flex items-center gap-1.5">
+          <span className="font-mono font-semibold text-foreground">{stats.today}</span>
           <span>today</span>
         </div>
-        <div className="flex items-center gap-1.5 text-muted-foreground">
-          <Zap className="h-3 w-3 text-primary" />
-          <span className="font-mono font-medium text-foreground">{stats.thisHour}</span>
+        <div className="h-3 w-px bg-border" />
+        <div className="flex items-center gap-1.5">
+          <span className="font-mono font-semibold text-foreground">{stats.thisHour}</span>
           <span>this hour</span>
         </div>
-        <div className="ml-auto flex items-center gap-1.5 text-muted-foreground">
-          <Globe className="h-3 w-3" />
-          <span>8 categories • AI moderated</span>
+        <div className="h-3 w-px bg-border hidden sm:block" />
+        <div className="hidden sm:flex items-center gap-1.5">
+          <span>25+ categories</span>
         </div>
       </div>
     </div>

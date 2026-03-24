@@ -38,48 +38,44 @@ export function TrendingSidebar() {
   });
 
   return (
-    <div className="space-y-4">
-      {/* Trending */}
-      <div className="animate-reveal rounded-lg border border-border bg-card p-4" style={{ animationDelay: "200ms" }}>
-        <div className="mb-3 flex items-center gap-2">
-          <Flame className="h-4 w-4 text-destructive" />
-          <h3 className="text-sm font-semibold text-card-foreground">Trending Now</h3>
+    <div className="space-y-6 sticky top-36">
+      {/* Most Read */}
+      <div className="animate-reveal" style={{ animationDelay: "200ms" }}>
+        <div className="mb-3 flex items-center gap-2 border-b-2 border-primary pb-2">
+          <Flame className="h-4 w-4 text-primary" />
+          <h3 className="text-xs font-body font-bold uppercase tracking-wider text-foreground">Most Read</h3>
         </div>
-        <div className="space-y-2.5">
+        <div className="space-y-3">
           {trending?.map((signal, i) => (
             <Link
               key={signal.id}
               to={`/signal/${signal.id}`}
-              className="group block"
+              className="group flex items-start gap-3"
             >
-              <div className="flex items-start gap-2">
-                <span className="mt-0.5 text-xs font-bold text-muted-foreground/50">
-                  {String(i + 1).padStart(2, "0")}
+              <span className="mt-0.5 font-headline text-2xl font-bold text-border group-hover:text-primary transition-colors">
+                {String(i + 1).padStart(2, "0")}
+              </span>
+              <div className="min-w-0 flex-1">
+                <p className="text-[13px] font-body font-medium leading-snug text-foreground group-hover:text-primary transition-colors line-clamp-3">
+                  {signal.title}
+                </p>
+                <span className="mt-0.5 block text-[10px] font-body text-muted-foreground">
+                  {categoryLabels[signal.category] || signal.category}
                 </span>
-                <div className="min-w-0 flex-1">
-                  <p className="text-xs font-medium leading-snug text-foreground group-hover:text-primary transition-colors line-clamp-2">
-                    {signal.title}
-                  </p>
-                  <div className="mt-0.5 flex items-center gap-1.5 text-[10px] text-muted-foreground">
-                    <span>{categoryLabels[signal.category] || signal.category}</span>
-                    <span>•</span>
-                    <span>{signal.source}</span>
-                  </div>
-                </div>
               </div>
             </Link>
           ))}
           {!trending?.length && (
-            <p className="text-xs text-muted-foreground">No trending signals yet</p>
+            <p className="text-xs font-body text-muted-foreground">No trending articles yet</p>
           )}
         </div>
       </div>
 
-      {/* Category breakdown */}
-      <div className="animate-reveal rounded-lg border border-border bg-card p-4" style={{ animationDelay: "280ms" }}>
-        <div className="mb-3 flex items-center gap-2">
-          <TrendingUp className="h-4 w-4 text-primary" />
-          <h3 className="text-sm font-semibold text-card-foreground">Categories</h3>
+      {/* Categories */}
+      <div className="animate-reveal" style={{ animationDelay: "280ms" }}>
+        <div className="mb-3 flex items-center gap-2 border-b-2 border-foreground pb-2">
+          <TrendingUp className="h-4 w-4 text-foreground" />
+          <h3 className="text-xs font-body font-bold uppercase tracking-wider text-foreground">Sections</h3>
         </div>
         <div className="space-y-1.5">
           {categoryCounts &&
@@ -87,10 +83,14 @@ export function TrendingSidebar() {
               .sort(([, a], [, b]) => (b as number) - (a as number))
               .slice(0, 12)
               .map(([cat, count]) => (
-                <div key={cat} className="flex items-center justify-between text-xs">
-                  <span className="text-muted-foreground">{categoryLabels[cat] || cat}</span>
-                  <span className="font-mono text-foreground/70">{String(count)}</span>
-                </div>
+                <Link
+                  key={cat}
+                  to={`/?category=${cat}`}
+                  className="flex items-center justify-between py-1 text-xs font-body hover:text-primary transition-colors"
+                >
+                  <span className="text-muted-foreground hover:text-foreground">{categoryLabels[cat] || cat}</span>
+                  <span className="font-mono text-foreground/50">{String(count)}</span>
+                </Link>
               ))}
         </div>
       </div>

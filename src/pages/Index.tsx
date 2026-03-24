@@ -1,13 +1,15 @@
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { SiteHeader } from "@/components/SiteHeader";
+import { BreakingTicker } from "@/components/BreakingTicker";
+import { StatsBar } from "@/components/StatsBar";
+import { HeroCarousel } from "@/components/HeroCarousel";
 import { CategoryFilter } from "@/components/CategoryFilter";
 import { SignalCard } from "@/components/SignalCard";
 import { SearchBar } from "@/components/SearchBar";
 import { TrendingSidebar } from "@/components/TrendingSidebar";
-import { StatsBar } from "@/components/StatsBar";
 import { useSignals } from "@/hooks/useSignals";
-import { Loader2, Rss, Newspaper } from "lucide-react";
+import { Loader2 } from "lucide-react";
 
 export default function Index() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -43,114 +45,46 @@ export default function Index() {
     return () => observer.disconnect();
   }, [signals, visibleCount]);
 
-  const heroSignal = signals?.[0];
-  const feedSignals = signals?.slice(1, visibleCount) || [];
+  const heroSignals = signals?.slice(0, 5) || [];
+  const feedSignals = signals?.slice(5, visibleCount + 5) || [];
 
   return (
     <div className="min-h-screen bg-background">
       <SiteHeader />
+      <BreakingTicker />
       <StatsBar />
 
       <main className="mx-auto max-w-7xl px-4 py-6">
-        {/* Hero section */}
-        <section className="mb-8 animate-reveal">
-          <div className="flex items-center gap-3 mb-4">
-            <Newspaper className="h-6 w-6 text-primary" />
-            <div>
-              <h1 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl" style={{ lineHeight: 1.1 }}>
-                SignalFlow
-              </h1>
-              <p className="text-xs text-muted-foreground mt-0.5">
-                AI-powered global intelligence • Updated every minute
-              </p>
-            </div>
-            <a
-              href={`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/rss-feed`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="ml-auto inline-flex items-center gap-1.5 rounded-md bg-accent/10 px-3 py-1.5 text-xs font-medium text-accent transition-colors hover:bg-accent/20 active:scale-[0.97]"
-            >
-              <Rss className="h-3 w-3" />
-              RSS
-            </a>
-          </div>
-        </section>
-
-        {/* Hero article card */}
-        {heroSignal && !isLoading && (
-          <section
-            className="mb-8 animate-reveal cursor-pointer"
-            style={{ animationDelay: "40ms" }}
-            onClick={() => navigate(`/signal/${heroSignal.id}`)}
-          >
-            <div className="group relative overflow-hidden rounded-xl border border-border bg-card transition-shadow hover:shadow-lg">
-              {heroSignal.image_url && (
-                <div className="h-48 sm:h-64 overflow-hidden">
-                  <img
-                    src={heroSignal.image_url}
-                    alt={heroSignal.title}
-                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    loading="eager"
-                  />
-                </div>
-              )}
-              <div className="p-6">
-                <div className="mb-2 flex items-center gap-2">
-                  <span className="rounded-md bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">
-                    {heroSignal.category.toUpperCase()}
-                  </span>
-                  {heroSignal.importance >= 8 && (
-                    <span className="text-xs font-medium text-destructive">🔴 BREAKING</span>
-                  )}
-                  <span className="ml-auto text-xs text-muted-foreground">
-                    {heroSignal.source}
-                  </span>
-                </div>
-                <h2 className="mb-2 text-xl font-bold tracking-tight text-card-foreground group-hover:text-primary transition-colors sm:text-2xl" style={{ lineHeight: 1.2 }}>
-                  {heroSignal.title}
-                </h2>
-                <p className="text-sm leading-relaxed text-muted-foreground line-clamp-3">
-                  {heroSignal.summary}
-                </p>
-                <div className="mt-3 flex items-center gap-3 text-xs text-muted-foreground">
-                  {heroSignal.author_name && <span>By {heroSignal.author_name}</span>}
-                  <span>•</span>
-                  <span>{Math.max(1, Math.ceil((heroSignal.content || heroSignal.summary).split(" ").length / 200))} min read</span>
-                </div>
-              </div>
-            </div>
-          </section>
+        {/* Hero carousel */}
+        {!isLoading && heroSignals.length > 0 && !category && !search && (
+          <HeroCarousel signals={heroSignals} />
         )}
 
         <div className="flex gap-8">
           {/* Main feed */}
           <div className="min-w-0 flex-1">
+            {/* Section header */}
+            <div className="mb-4 flex items-end justify-between border-b-2 border-foreground pb-2">
+              <h2 className="text-sm font-body font-bold uppercase tracking-wider text-foreground">
+                {category ? (category.charAt(0).toUpperCase() + category.slice(1)) : "Latest News"}
+              </h2>
+              <span className="text-[10px] font-mono text-muted-foreground">
+                {signals?.length || 0} articles
+              </span>
+            </div>
+
             {/* Search */}
-            <section className="mb-4 animate-reveal" style={{ animationDelay: "60ms" }}>
+            <div className="mb-3">
               <SearchBar value={search} onChange={setSearch} />
-            </section>
+            </div>
 
             {/* Filters */}
-            <section className="mb-6 animate-reveal" style={{ animationDelay: "120ms" }}>
+            <div className="mb-4">
               <CategoryFilter selected={category} onSelect={handleCategoryChange} />
-            </section>
-
-            {/* Live indicator */}
-            <div className="mb-4 flex items-center gap-2 text-xs text-muted-foreground animate-reveal" style={{ animationDelay: "160ms" }}>
-              <span className="relative flex h-1.5 w-1.5">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-75" />
-                <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-accent" />
-              </span>
-              <span>AI-moderated • Live feed</span>
-              {signals && (
-                <span className="ml-auto font-mono">
-                  {signals.length} article{signals.length !== 1 ? "s" : ""}
-                </span>
-              )}
             </div>
 
             {/* Feed */}
-            <section className="space-y-3">
+            <div>
               {isLoading && (
                 <div className="flex items-center justify-center py-20">
                   <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
@@ -158,13 +92,13 @@ export default function Index() {
               )}
 
               {error && (
-                <div className="rounded-lg border border-destructive/30 bg-destructive/5 p-4 text-sm text-destructive">
+                <div className="rounded border border-destructive/30 bg-destructive/5 p-4 text-sm font-body text-destructive">
                   Failed to load articles. Please try again later.
                 </div>
               )}
 
               {signals?.length === 0 && !isLoading && (
-                <div className="py-20 text-center text-sm text-muted-foreground">
+                <div className="py-20 text-center text-sm font-body text-muted-foreground">
                   {search ? "No articles match your search." : "No articles in this category yet."}
                 </div>
               )}
@@ -180,30 +114,36 @@ export default function Index() {
               ))}
 
               {/* Infinite scroll trigger */}
-              {signals && visibleCount < signals.length && (
+              {signals && visibleCount + 5 < signals.length && (
                 <div ref={loaderRef} className="flex items-center justify-center py-8">
                   <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
                 </div>
               )}
-            </section>
+            </div>
           </div>
 
-          {/* Trending sidebar */}
+          {/* Sidebar */}
           <aside className="hidden w-72 shrink-0 lg:block">
             <TrendingSidebar />
           </aside>
         </div>
 
         {/* Footer */}
-        <footer className="mt-16 border-t border-border pb-8 pt-6">
-          <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-between">
-            <p className="text-xs text-muted-foreground">
-              SignalFlow — AI-powered global news intelligence. Free and open.
-            </p>
-            <div className="flex items-center gap-4 text-xs text-muted-foreground">
-              <a href={`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/rss-feed`} target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">RSS</a>
-              <a href={`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/sitemap`} target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">Sitemap</a>
+        <footer className="mt-16 border-t border-border pb-8 pt-8">
+          <div className="flex flex-col items-center gap-6 text-center">
+            <div>
+              <h3 className="font-headline text-lg text-foreground">THE RADAR</h3>
+              <p className="text-[11px] font-body text-muted-foreground mt-1">
+                Global News Intelligence — Updated every minute
+              </p>
             </div>
+            <div className="flex items-center gap-6 text-[11px] font-body text-muted-foreground">
+              <a href={`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/rss-feed`} target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors uppercase tracking-wide">RSS</a>
+              <a href={`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/sitemap`} target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors uppercase tracking-wide">Sitemap</a>
+            </div>
+            <p className="text-[10px] text-muted-foreground/60">
+              © {new Date().getFullYear()} The Radar. All rights reserved.
+            </p>
           </div>
         </footer>
       </main>

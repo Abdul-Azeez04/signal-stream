@@ -6,7 +6,7 @@ const ALL_CATEGORIES = [
 ] as const;
 
 const categoryLabels: Record<string, string> = {
-  breaking: "🔴 Breaking",
+  breaking: "Breaking",
   politics: "Politics",
   business: "Business",
   technology: "Technology",
@@ -41,13 +41,13 @@ type Props = {
 
 export function CategoryFilter({ selected, onSelect }: Props) {
   return (
-    <div className="flex flex-wrap gap-1.5">
+    <div className="flex gap-1 overflow-x-auto pb-1 scrollbar-hide">
       <button
         onClick={() => onSelect(null)}
-        className={`rounded-full px-3 py-1 text-xs font-medium transition-colors duration-150 active:scale-95 ${
+        className={`shrink-0 rounded px-3 py-1 text-[11px] font-body font-semibold uppercase tracking-wide transition-colors duration-150 ${
           selected === null
             ? "bg-foreground text-background"
-            : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
+            : "text-muted-foreground hover:bg-secondary hover:text-foreground"
         }`}
       >
         All
@@ -56,10 +56,10 @@ export function CategoryFilter({ selected, onSelect }: Props) {
         <button
           key={cat}
           onClick={() => onSelect(cat)}
-          className={`rounded-full px-3 py-1 text-xs font-medium transition-colors duration-150 active:scale-95 ${
+          className={`shrink-0 rounded px-3 py-1 text-[11px] font-body font-medium uppercase tracking-wide transition-colors duration-150 ${
             selected === cat
               ? "bg-foreground text-background"
-              : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
+              : "text-muted-foreground hover:bg-secondary hover:text-foreground"
           }`}
         >
           {categoryLabels[cat] || cat}
